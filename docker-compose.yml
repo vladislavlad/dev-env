@@ -20,14 +20,12 @@ services:
     ports:
       - "9042:9042"
     volumes:
-      - ./init/scylla:/docker-entrypoint-init.d/
+      - ./init/scylla:/docker-entrypoint.d/
 
   scylla-migration:
     image: migrate/migrate
     command: ["-database", "cassandra://scylla:9042/accounts?x-multi-statement=true", "-path", "/migrations", "up"]
     restart: on-failure
-    environment:
-      CASSANDRA_CONNECTION: cassandra://scylla:9042/accounts
     depends_on:
       - scylla
     volumes:
