@@ -31,6 +31,7 @@ services:
       - scylla
     volumes:
       - ./init/scylla/migrations:/migrations/
+
   kafka0:
     image: confluentinc/cp-kafka:7.0.5.arm64
     hostname: kafka0
