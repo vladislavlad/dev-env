@@ -20,7 +20,7 @@ services:
     ports:
       - "9042:9042"
     volumes:
-      - ./init/scylla:/docker-entrypoint.d/
+      - ./init/scylla/keyspace:/docker-entrypoint.d/
 
   scylla-migration:
     image: migrate/migrate
