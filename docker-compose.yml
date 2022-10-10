@@ -27,8 +27,6 @@ services:
     image: migrate/migrate
     command: ["-database", "cassandra://scylla:9042/accounts?x-multi-statement=true", "-path", "/migrations", "up"]
     restart: on-failure
-    environment:
-      CASSANDRA_CONNECTION: cassandra://scylla:9042/accounts
     depends_on:
       - scylla
     volumes:
@@ -69,15 +67,10 @@ services:
       - "8090:8080"
     depends_on:
       - kafka0
-    #      - schemaregistry0
-    #      - kafka-connect0
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka0:29092
       KAFKA_CLUSTERS_0_JMXPORT: 9997
-  #      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schemaregistry0:8085
-  #      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: first
-  #      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: http://kafka-connect0:8083
 
   accounts:
     image: vladislavlad/accounts:latest
