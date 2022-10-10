@@ -13,7 +13,7 @@ services:
 
   scylla:
     image: scylladb/scylla:4.6.3
-    entrypoint: /docker-entrypoint-init.d/init-keyspace.sh
+    entrypoint: /docker-entrypoint.d/init-keyspace.sh
     command: ["--skip-wait-for-gossip-to-settle", "0"] # Note: for DEV mode only !!!
     environment:
       CASSANDRA_KEYSPACE: accounts
