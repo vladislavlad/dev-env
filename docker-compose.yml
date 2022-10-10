@@ -14,13 +14,14 @@ services:
   scylla:
     image: scylladb/scylla:4.6.3
     entrypoint: /docker-entrypoint.d/init-keyspace.sh
-    command: ["--skip-wait-for-gossip-to-settle", "0"] # Note: for DEV mode only !!!
+    # Note: --skip-wait-for-gossip-to-settle for DEV mode only !!!
+    command: ["--skip-wait-for-gossip-to-settle", "0"]
     environment:
       CASSANDRA_KEYSPACE: accounts
     ports:
       - "9042:9042"
     volumes:
-      - ./init/scylla:/docker-entrypoint.d/
+      - ./init/scylla/keyspace:/docker-entrypoint.d/
 
   scylla-migration:
     image: migrate/migrate
