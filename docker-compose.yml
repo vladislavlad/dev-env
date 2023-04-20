@@ -12,7 +12,7 @@ services:
       - ./init/postgres:/docker-entrypoint-initdb.d/
 
   scylla:
-    image: scylladb/scylla:5.1.7
+    image: scylladb/scylla:5.1.8
     entrypoint: /docker-entrypoint.d/init-keyspace.sh
     # Note: --skip-wait-for-gossip-to-settle for DEV mode only !!!
     command: ["--skip-wait-for-gossip-to-settle", "0"]
@@ -24,7 +24,7 @@ services:
       - ./init/scylla/keyspace:/docker-entrypoint.d/
 
   scylla-migration:
-    image: migrate/migrate
+    image: migrate/migrate:latest
     command: ["-database", "cassandra://scylla:9042/accounts?x-multi-statement=true", "-path", "/migrations", "up"]
     restart: on-failure
     depends_on:
@@ -33,7 +33,7 @@ services:
       - ./init/scylla/migrations:/migrations/
 
   kafka0:
-    image: confluentinc/cp-kafka:7.3.2.arm64
+    image: confluentinc/cp-kafka:7.3.3.arm64
     hostname: kafka0
     ports:
       - "9092:9092"
@@ -71,7 +71,7 @@ services:
       KAFKA_CLUSTERS_0_JMXPORT: 9997
 
   redis:
-    image: redis:7-alpine
+    image: redis:7.2-alpine
     ports:
       - "6379:6379"
 
@@ -94,7 +94,7 @@ services:
 #      - ./prometheus:/prometheus
 
   zipkin:
-    image: openzipkin/zipkin
+    image: openzipkin/zipkin:latest-arm64
     ports:
       - "9411:9411"
 
