@@ -1,6 +1,6 @@
 version: "3.9"
-services:
 
+services:
   postgres:
     image: postgres:15.2-alpine
     environment:
@@ -33,7 +33,7 @@ services:
       - ./init/scylla/migrations:/migrations/
 
   kafka0:
-    image: confluentinc/cp-kafka:7.3.3.arm64
+    image: confluentinc/cp-kafka:7.3.3
     hostname: kafka0
     ports:
       - "9092:9092"
@@ -94,12 +94,12 @@ services:
 #      - ./prometheus:/prometheus
 
   zipkin:
-    image: openzipkin/zipkin:latest-arm64
+    image: openzipkin/zipkin:latest
     ports:
       - "9411:9411"
 
 #  accounts:
-#    image: vladislavlad/accounts:0.1.2-aarch64
+#    image: vladislavlad/accounts:0.1.2
 #    restart: on-failure
 #    ports:
 #      - "8080:8080"
