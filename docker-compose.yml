@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:15.2-alpine
+    image: postgres:16.1-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres2
@@ -11,7 +11,7 @@ services:
       - ./init/postgres:/docker-entrypoint-initdb.d/
 
   scylla:
-    image: scylladb/scylla:5.2.1
+    image: scylladb/scylla:5.2.11
     entrypoint: /docker-entrypoint.d/init-keyspace.sh
     # Note: --skip-wait-for-gossip-to-settle for DEV mode only !!!
     command: ["--skip-wait-for-gossip-to-settle", "0"]
@@ -32,7 +32,7 @@ services:
       - ./init/scylla/migrations:/migrations/
 
   kafka0:
-    image: confluentinc/cp-kafka:7.3.3.arm64
+    image: confluentinc/cp-kafka:7.3.5.arm64
     hostname: kafka0
     ports:
       - "9092:9092"
@@ -71,7 +71,7 @@ services:
       KAFKA_CLUSTERS_0_JMXPORT: 9997
 
   redis:
-    image: redis:7-alpine
+    image: redis:7.2-alpine
     ports:
       - "6379:6379"
 
@@ -99,7 +99,7 @@ services:
       - "9411:9411"
 
 #  accounts:
-#    image: vladislavlad/accounts:0.2.1-aarch64
+#    image: vladislavlad/accounts:0.3.5-aarch64
 #    restart: on-failure
 #    ports:
 #      - "8080:8080"
@@ -110,6 +110,10 @@ services:
 #      spring.flyway.url: jdbc:postgresql://postgres:5432/accounts
 #      spring.cloud.stream.kafka.binder.brokers: kafka0:29092
 #      spring.kafka.bootstrap-servers: kafka0:9092
+#      spring.data.redis.host: redis
+#      spring.data.redis.port: 6379
+#      spring.data.redis.database: 0
+#      management.zipkin.tracing.endpoint: http://zipkin:9411/api/v2/spans
 #    depends_on:
 #      - postgres
 #      - scylla
