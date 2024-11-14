@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   postgres:
-    image: postgres:16.2-alpine
+    image: postgres:17-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres2
@@ -11,7 +11,7 @@ services:
       - ./init/postgres:/docker-entrypoint-initdb.d/
 
   scylla:
-    image: scylladb/scylla:5.2.16
+    image: scylladb/scylla:5.2.19
     entrypoint: /docker-entrypoint.d/init-keyspace.sh
     # Note: --skip-wait-for-gossip-to-settle for DEV mode only !!!
     command: ["--skip-wait-for-gossip-to-settle", "0"]
@@ -23,7 +23,7 @@ services:
       - ./init/scylla/keyspace:/docker-entrypoint.d/
 
   scylla-migration:
-    image: migrate/migrate:latest
+    image: migrate/migrate:v4.18.1
     command: ["-database", "cassandra://scylla:9042/accounts?x-multi-statement=true", "-path", "/migrations", "up"]
     restart: on-failure
     depends_on:
@@ -38,6 +38,7 @@ services:
       - "9092:9092"
       - "9997:9997"
     environment:
+      CLUSTER_ID: "kafka-local"
       KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka0:29092,PLAINTEXT_HOST://localhost:9092
@@ -59,7 +60,7 @@ services:
     command: "bash -c 'if [ ! -f /tmp/update_run.sh ]; then echo \"ERROR: Did you forget the update_run.sh file that came with this docker-compose.yml file?\" && exit 1 ; else /tmp/update_run.sh && /etc/confluent/docker/run ; fi'"
 
   kafka-ui:
-    image: provectuslabs/kafka-ui:latest
+    image: provectuslabs/kafka-ui:v0.7.2
     ports:
       - "8090:8080"
     depends_on:
@@ -70,7 +71,7 @@ services:
       KAFKA_CLUSTERS_0_JMXPORT: 9997
 
   redis:
-    image: redis:7.2-alpine
+    image: redis:7.4-alpine
     ports:
       - "6379:6379"
 
@@ -98,7 +99,7 @@ services:
       - "9411:9411"
 
 #  accounts:
-#    image: vladislavlad/accounts:0.3.8
+#    image: vladislavlad/accounts:0.3.16
 #    restart: on-failure
 #    ports:
 #      - "8080:8080"
@@ -109,6 +110,10 @@ services:
 #      spring.flyway.url: jdbc:postgresql://postgres:5432/accounts
 #      spring.cloud.stream.kafka.binder.brokers: kafka0:29092
 #      spring.kafka.bootstrap-servers: kafka0:9092
+#      spring.data.redis.host: redis
+#      spring.data.redis.port: 6379
+#      spring.data.redis.database: 0
+#      management.zipkin.tracing.endpoint: http://zipkin:9411/api/v2/spans
 #    depends_on:
 #      - postgres
 #      - scylla

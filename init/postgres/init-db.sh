@@ -13,4 +13,8 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     CREATE USER trading WITH PASSWORD 'trading';
     CREATE DATABASE trading WITH OWNER trading;
     GRANT ALL PRIVILEGES ON DATABASE trading TO trading;
+
+    CREATE USER comments WITH PASSWORD 'comments';
+    CREATE DATABASE comments WITH OWNER comments;
+    GRANT ALL PRIVILEGES ON DATABASE comments TO comments;
 EOSQL
